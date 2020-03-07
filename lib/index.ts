@@ -23,7 +23,7 @@ program
 
 program.on('--help', () => {
   console.log(
-    chalk.red(
+    chalk.yellowBright(
       figlet.textSync('Is\nDeprecated?', {
         horizontalLayout: 'full',
         verticalLayout: 'full',
