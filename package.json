@@ -21,6 +21,8 @@
     "github",
     "deprecated",
     "archived",
+    "repository",
+    "package",
     "check",
     "find"
   ],
