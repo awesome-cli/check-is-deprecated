@@ -37,48 +37,64 @@ program
             return console.log(stderr);
           }
 
-          stdout.split("'").map(async item => {
+          let user = '';
+          let repo = '';
+          let message = '';
+
+          let deprecated = false;
+
+          let messageIndex: number;
+
+          stdout.split("'").map(async (item, itemIndex) => {
+            if (item.includes('deprecated')) {
+              deprecated = true;
+
+              messageIndex = itemIndex + 1;
+            }
+
+            if (itemIndex === messageIndex) {
+              message = item;
+            }
+
             if (item.includes('://')) {
               const parts = item.split('/');
 
-              const user = parts[3];
-              const repo = parts[4].replace('.git', '');
-
-              spinner.text = 'Checking GitHub repository';
-              spinner.color = 'yellow';
-              spinner.start();
-
-              let data;
-
-              try {
-                const res = await fetch(
-                  `https://api.github.com/repos/${user}/${repo}`
-                );
-
-                data = await res.json();
-
-                // console.log(data);
-              } catch (err) {
-                // console.log(err);
-              }
-
-              spinner.stop();
-
-              console.log(`${chalk.bold.magentaBright(arg)}:`);
-
-              console.log(
-                `${logSymbols[data.archived ? 'error' : 'success']} npm`
-              );
-
-              console.log(
-                `${logSymbols[data.archived ? 'error' : 'success']} GitHub`
-              );
-
-              if (index + 1 < cmd.args.length) {
-                console.log('');
-              }
+              user = parts[3];
+              repo = parts[4].replace('.git', '');
             }
           });
+
+          spinner.text = 'Checking GitHub repository';
+          spinner.color = 'yellow';
+          spinner.start();
+
+          let data;
+
+          try {
+            const res = await fetch(
+              `https://api.github.com/repos/${user}/${repo}`
+            );
+
+            data = await res.json();
+          } catch (err) {
+            console.log(err);
+          }
+
+          spinner.stop();
+
+          console.log(`${chalk.bold.magentaBright(arg)}:`);
+
+          console.log(`${logSymbols[deprecated ? 'error' : 'success']} npm`);
+
+          console.log(
+            data.id
+              ? `${logSymbols[data.archived ? 'error' : 'success']} GitHub`
+              : 'GitHub repository not found'
+          );
+
+          if (index + 1 < cmd.args.length) {
+            console.log('');
+          }
         }
       );
     });

@@ -19,5 +19,9 @@ $ name <packages>
 
 **Instead of `name` you can use alias: `isd`**
 
+## Options
+- `-m, --msg` output deprecation message
+- `-r, --repo` output repo link
+
 ## License
 This project is licensed under the MIT License © 2021-present Jakub Biesiada
