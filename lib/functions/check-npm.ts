@@ -10,6 +10,8 @@ export const checkNpmRepo = async (arg: string) => {
   let repo = '';
   let message = '';
 
+  let errorMessage = '';
+
   let deprecated = false;
 
   let messageIndex: number;
@@ -21,8 +23,6 @@ export const checkNpmRepo = async (arg: string) => {
     const stdout = (await execAsync(
       `npm view ${arg} deprecated repository`
     )) as string;
-
-    spinner.stop();
 
     stdout.split("'").map(async (item, itemIndex) => {
       if (item.includes('deprecated')) {
@@ -43,7 +43,9 @@ export const checkNpmRepo = async (arg: string) => {
       }
     });
   } catch (err) {
-    console.log(err);
+    errorMessage = `${arg} not found`;
+  } finally {
+    spinner.stop();
   }
 
   return {
@@ -51,5 +53,6 @@ export const checkNpmRepo = async (arg: string) => {
     repo,
     message,
     deprecated,
+    errorMessage,
   };
 };

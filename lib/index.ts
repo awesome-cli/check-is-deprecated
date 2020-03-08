@@ -22,12 +22,26 @@ program
       return console.log('Packages are not provided');
     }
 
-    await args.map(async (arg: string, index: number) => {
-      const { user, repo, message, deprecated } = await checkNpmRepo(arg);
+    const data = await Promise.all(
+      args.map(async (arg: string) => {
+        const fromNpm = await checkNpmRepo(arg);
 
-      const { id, archived, html_url } = await checkGithubRepo(user, repo);
+        const { user, repo, errorMessage } = fromNpm;
 
-      console.log(`${chalk.bold.magentaBright(arg)}:`);
+        if (errorMessage) {
+          return console.log(errorMessage);
+        }
+
+        const fromGithub = await checkGithubRepo(user, repo);
+
+        return { ...fromNpm, ...fromGithub };
+      })
+    );
+
+    data.map((item: any, index: number) => {
+      const { repo, deprecated, message, id, archived, html_url } = item;
+
+      console.log(`${chalk.bold.magentaBright(repo)}:`);
 
       console.log(
         `${logSymbols[deprecated ? 'error' : 'success']} npm${
@@ -45,7 +59,7 @@ program
         console.log(`${logSymbols.warning} GitHub repository not found`);
       }
 
-      if (index + 1 < args.length) {
+      if (index + 1 < data.length) {
         console.log(' ');
       }
     });
