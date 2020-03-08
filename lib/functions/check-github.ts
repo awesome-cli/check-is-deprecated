@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 import { spinner } from './spinner';
 
-export const checkGithub = async (user: string, repo: string) => {
+export const checkGithubRepo = async (user: string, repo: string) => {
   spinner.text = 'Checking GitHub repository';
   spinner.color = 'yellow';
   spinner.start();

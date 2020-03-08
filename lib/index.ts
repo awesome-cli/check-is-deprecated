@@ -6,8 +6,8 @@ import figlet from 'figlet';
 import chalk from 'chalk';
 import logSymbols from 'log-symbols';
 
-import { checkNpm } from './functions/check-npm';
-import { checkGithub } from './functions/check-github';
+import { checkNpmRepo } from './functions/check-npm';
+import { checkGithubRepo } from './functions/check-github';
 
 const pkg = require(path.join(__dirname, '../package.json'));
 
@@ -19,9 +19,9 @@ program
   .option('-l, --link', 'output repo link')
   .action(async ({ args, msg, link }) => {
     await args.map(async (arg: string, index: number) => {
-      const { user, repo, message, deprecated } = await checkNpm(arg);
+      const { user, repo, message, deprecated } = await checkNpmRepo(arg);
 
-      const data = await checkGithub(user, repo);
+      const { id, archived, html_url } = await checkGithubRepo(user, repo);
 
       console.log(`${chalk.bold.magentaBright(arg)}:`);
 
@@ -31,13 +31,15 @@ program
         }`
       );
 
-      console.log(
-        data.id
-          ? `${logSymbols[data.archived ? 'error' : 'success']} GitHub${
-              link && data.html_url ? ` – ${data.html_url}` : ''
-            }`
-          : `${logSymbols.warning} GitHub repository not found`
-      );
+      if (id) {
+        console.log(
+          `${logSymbols[archived ? 'error' : 'success']} GitHub${
+            link && html_url ? ` – ${html_url}` : ''
+          }`
+        );
+      } else {
+        console.log(`${logSymbols.warning} GitHub repository not found`);
+      }
 
       if (index + 1 < args.length) {
         console.log(' ');

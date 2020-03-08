@@ -5,7 +5,7 @@ import { spinner } from './spinner';
 
 const execAsync = promisify(exec);
 
-export const checkNpm = async (arg: string) => {
+export const checkNpmRepo = async (arg: string) => {
   let user = '';
   let repo = '';
   let message = '';
