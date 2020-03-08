@@ -50,7 +50,7 @@ program
 program.on('--help', () => {
   console.log(
     chalk.yellowBright(
-      figlet.textSync('Is\nDeprecated?', {
+      figlet.textSync('Check Is\nDeprecated?', {
         horizontalLayout: 'full',
         verticalLayout: 'full',
       })
