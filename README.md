@@ -21,7 +21,7 @@ $ name <packages>
 
 ## Options
 - `-m, --msg` output deprecation message
-- `-r, --repo` output repo link
+- `-l, --link` output repo link
 
 ## License
 This project is licensed under the MIT License © 2021-present Jakub Biesiada
