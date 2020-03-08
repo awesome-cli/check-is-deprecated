@@ -18,7 +18,11 @@
   },
   "keywords": [
     "npm",
-    "github"
+    "github",
+    "deprecated",
+    "archived",
+    "check",
+    "find"
   ],
   "bugs": {
     "url": "https://github.com/JB1905/is-deprecated/issues"
