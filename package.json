@@ -1,6 +1,6 @@
 {
-  "name": "is-deprecated",
-  "version": "1.0.0",
+  "name": "check-is-deprecated",
+  "version": "1.0.0-beta.1",
   "description": "Check if npm package is deprecated or archived",
   "author": "Jakub Biesiada",
   "license": "MIT",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JB1905/is-deprecated.git"
+    "url": "https://github.com/JB1905/check-is-deprecated.git"
   },
   "engines": {
     "node": ">=10"
@@ -27,12 +27,13 @@
     "find"
   ],
   "bugs": {
-    "url": "https://github.com/JB1905/is-deprecated/issues"
+    "url": "https://github.com/JB1905/check-is-deprecated/issues"
   },
-  "homepage": "https://github.com/JB1905/is-deprecated#readme",
+  "homepage": "https://github.com/JB1905/check-is-deprecated#readme",
   "bin": {
+    "check-is-deprecated": "bin/index.js",
     "is-deprecated": "bin/index.js",
-    "isd": "bin/index.js"
+    "cid": "bin/index.js"
   },
   "dependencies": {
     "bluebird": "^3.7.2",

@@ -1,7 +1,7 @@
-# [Is deprecated](https://github.com/jb1905/is-deprecated)
+# [Check is deprecated](https://github.com/jb1905/check-is-deprecated)
 
-[![NPM version](http://img.shields.io/npm/v/is-deprecated.svg?style=flat-square)](https://www.npmjs.com/package/is-deprecated)
-[![NPM downloads](http://img.shields.io/npm/dm/is-deprecated.svg?style=flat-square)](https://www.npmjs.com/package/is-deprecated)
+[![NPM version](http://img.shields.io/npm/v/check-is-deprecated.svg?style=flat-square)](https://www.npmjs.com/package/check-is-deprecated)
+[![NPM downloads](http://img.shields.io/npm/dm/check-is-deprecated.svg?style=flat-square)](https://www.npmjs.com/package/check-is-deprecated)
 
 ## About
 Check if npm package is deprecated or archived
@@ -9,19 +9,19 @@ Check if npm package is deprecated or archived
 ## How to Install
 First, install the CLI by npm:
 ```bash
-$ npm install -g name
+$ npm install -g check-is-deprecated
 ```
 
 ## How to Use
 ```bash
-$ name <packages> [options]
+$ check-is-deprecated <packages> [options]
 ```
 
-**Instead of `name` you can use alias: `isd`**
+**Instead of `check-is-deprecated` you can use aliases: `is-deprecated` & `cid`**
 
 ## Options
 - `-m, --msg` output deprecation message
 - `-l, --link` output repo link
 
 ## License
-This project is licensed under the MIT License © 2021-present Jakub Biesiada
+This project is licensed under the MIT License © 2020-present Jakub Biesiada
