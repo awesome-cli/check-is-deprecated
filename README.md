@@ -14,7 +14,7 @@ $ npm install -g name
 
 ## How to Use
 ```bash
-$ name <packages>
+$ name <packages> [options]
 ```
 
 **Instead of `name` you can use alias: `isd`**
