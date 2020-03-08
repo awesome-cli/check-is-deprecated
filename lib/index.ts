@@ -18,6 +18,10 @@ program
   .option('-m, --msg', 'output deprecation message')
   .option('-l, --link', 'output repo link')
   .action(async ({ args, msg, link }) => {
+    if (args.length === 0) {
+      return console.log('Packages are not provided');
+    }
+
     await args.map(async (arg: string, index: number) => {
       const { user, repo, message, deprecated } = await checkNpmRepo(arg);
 
