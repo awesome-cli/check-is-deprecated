@@ -24,29 +24,33 @@ program
 
     const data = await Promise.all(
       args.map(async (arg: string) => {
-        const fromNpm = await checkNpmRepo(arg);
+        const npmData = await checkNpmRepo(arg);
 
-        const { user, repo, errorMessage } = fromNpm;
+        const { user, repo } = npmData;
 
-        if (errorMessage) {
-          return console.log(errorMessage);
-        }
+        const githubData = await checkGithubRepo(user, repo);
 
-        const fromGithub = await checkGithubRepo(user, repo);
-
-        return { ...fromNpm, ...fromGithub };
+        return {
+          npm: npmData,
+          github: githubData,
+        };
       })
     );
 
     data.map((item: any, index: number) => {
-      const { repo, deprecated, message, id, archived, html_url } = item;
+      if (!item) return;
 
-      console.log(`${chalk.bold.magentaBright(repo)}:`);
+      const { npm, github } = item;
+
+      const { deprecated, message } = npm;
+      const { id, archived, html_url } = github;
+
+      console.log(`${chalk.bold.magentaBright(args[index])}:`);
 
       console.log(
         `${logSymbols[deprecated ? 'error' : 'success']} npm${
           msg && message ? ` – ${message}` : ''
-        }`
+        }${link ? ` – https://www.npmjs.com/package/${args[index]}` : ''}`
       );
 
       if (id) {
