@@ -45,7 +45,7 @@ program
       const { npm, github } = item;
 
       const { data, error } = npm;
-      const { id, archived, html_url, message } = github;
+      const { archived, html_url, message } = github;
 
       if (error.message) {
         console.log(error.message);
@@ -59,15 +59,13 @@ program
         );
 
         if (!message) {
-          if (id) {
-            console.log(
-              `${logSymbols[archived ? 'error' : 'success']} GitHub${
-                link && html_url ? ` – ${html_url}` : ''
-              }`
-            );
-          } else {
-            console.log(`${logSymbols.warning} GitHub repository not found`);
-          }
+          console.log(
+            `${logSymbols[archived ? 'error' : 'success']} GitHub${
+              link && html_url ? ` – ${html_url}` : ''
+            }`
+          );
+        } else if (message === 'Not Found') {
+          console.log(`${logSymbols.warning} GitHub repository not found`);
         }
 
         if (msg && data.message) {
