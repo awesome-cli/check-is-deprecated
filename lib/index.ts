@@ -11,6 +11,8 @@ import { checkGithubRepo } from './functions/check-github';
 
 const pkg = require(path.join(__dirname, '../package.json'));
 
+const info = chalk.cyan('❯');
+
 program
   .version(pkg.version)
   .description('Check if npm package is deprecated or archived')
@@ -22,30 +24,56 @@ program
       return console.log('Packages are not provided');
     }
 
-    await args.map(async (arg: string, index: number) => {
-      const { user, repo, message, deprecated } = await checkNpmRepo(arg);
+    const packages = await Promise.all(
+      args.map(async (arg: string) => {
+        const npmData = await checkNpmRepo(arg);
 
-      const { id, archived, html_url } = await checkGithubRepo(user, repo);
+        const { data } = npmData;
 
-      console.log(`${chalk.bold.magentaBright(arg)}:`);
+        const githubData = await checkGithubRepo(data.user, data.repo);
 
-      console.log(
-        `${logSymbols[deprecated ? 'error' : 'success']} npm${
-          msg && message ? ` – ${message}` : ''
-        }`
-      );
+        return {
+          npm: npmData,
+          github: githubData,
+        };
+      })
+    );
 
-      if (id) {
+    packages.map((item: any, index: number) => {
+      if (!item) return;
+
+      const { npm, github } = item;
+
+      const { data, error } = npm;
+      const { archived, html_url, message } = github;
+
+      if (error.message) {
+        console.log(error.message);
+      } else {
+        console.log(`${chalk.bold.magentaBright(args[index])}:`);
+
         console.log(
-          `${logSymbols[archived ? 'error' : 'success']} GitHub${
-            link && html_url ? ` – ${html_url}` : ''
+          `${logSymbols[data.deprecated ? 'error' : 'success']} npm${
+            link ? ` – https://www.npmjs.com/package/${args[index]}` : ''
           }`
         );
-      } else {
-        console.log(`${logSymbols.warning} GitHub repository not found`);
+
+        if (!message) {
+          console.log(
+            `${logSymbols[archived ? 'error' : 'success']} GitHub${
+              link && html_url ? ` – ${html_url}` : ''
+            }`
+          );
+        } else if (message === 'Not Found') {
+          console.log(`${logSymbols.warning} GitHub repository not found`);
+        }
+
+        if (msg && data.message) {
+          console.log(`${info} ${data.message}`);
+        }
       }
 
-      if (index + 1 < args.length) {
+      if (index + 1 < packages.length) {
         console.log(' ');
       }
     });
