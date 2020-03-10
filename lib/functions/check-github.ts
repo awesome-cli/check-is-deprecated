@@ -7,7 +7,7 @@ export const checkGithubRepo = async (user: string, repo: string) => {
   spinner.color = 'yellow';
   spinner.start();
 
-  let data;
+  let data: any;
 
   try {
     const res = await fetch(`https://api.github.com/repos/${user}/${repo}`);
