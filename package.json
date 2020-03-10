@@ -1,6 +1,6 @@
 {
   "name": "check-is-deprecated",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "Check if npm package is deprecated or archived",
   "author": "Jakub Biesiada",
   "license": "MIT",
