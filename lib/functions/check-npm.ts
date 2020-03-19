@@ -5,32 +5,27 @@ import { spinner } from './spinner';
 
 const execAsync = promisify(exec);
 
-type NpmData = {
-  message: string;
-  user: string;
-  repo: string;
-  deprecated: boolean;
-};
-
-type NpmError = {
-  message: string;
-};
+// type NpmData = {
+//   message: string;
+//   user: string;
+//   repo: string;
+//   deprecated: boolean;
+// };
 
 export const checkNpmRepo = async (arg: string) => {
   let messageIndex: number;
-
-  const data: NpmData = {} as NpmData;
-  const error: NpmError = {} as NpmError;
 
   spinner.text = 'Checking npm repository';
   spinner.start();
 
   try {
+    const data = {} as any;
+
     const { stderr, stdout } = await execAsync(
       `npm view ${arg} deprecated repository`
     );
 
-    spinner.succeed();
+    spinner.stop();
 
     stdout.split("'").map(async (item, itemIndex) => {
       if (item.includes('deprecated')) {
@@ -50,9 +45,11 @@ export const checkNpmRepo = async (arg: string) => {
         data.repo = parts[4].replace('.git', '');
       }
     });
-  } catch (err) {
-    spinner.fail(`npm - ${arg} not found`);
-  }
 
-  return { data, error };
+    return data;
+  } catch (err) {
+    spinner.stop();
+
+    return { error: `npm - ${arg} not found` };
+  }
 };

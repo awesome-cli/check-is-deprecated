@@ -4,6 +4,7 @@ import path from 'path';
 import program from 'commander';
 import figlet from 'figlet';
 import chalk from 'chalk';
+import logSymbols from 'log-symbols';
 
 import { checkNpmRepo } from './functions/check-npm';
 import { checkGithubRepo } from './functions/check-github';
@@ -23,20 +24,52 @@ program
       return console.log('Packages are not provided');
     }
 
-    await Promise.all(
+    const results = await Promise.all(
       args.map(async (arg: string) => {
-        console.log(`${chalk.bold.magentaBright(arg)}:`);
+        const npm = await checkNpmRepo(arg);
 
-        const { data } = await checkNpmRepo(arg);
+        const github = await checkGithubRepo(npm.user, npm.repo);
 
-        await checkGithubRepo(data.user, data.repo);
-
-        // return {
-        //   npm: npmData,
-        //   github: githubData,
-        // };
+        return { pkg: arg, npm, github };
       })
     );
+
+    results.map(({ pkg, npm, github }: any, index) => {
+      const { deprecated, message: npmMessage, error } = npm;
+      const { id, archived, html_url, message: githubMessage } = github;
+
+      if (error) {
+        console.log(chalk.yellow(`${logSymbols.warning} ${error}`));
+      } else {
+        console.log(`${chalk.bold.magentaBright(pkg)}:`);
+
+        console.log(
+          `${logSymbols[deprecated ? 'error' : 'success']} npm${
+            link ? ` – https://www.npmjs.com/package/${pkg}` : ''
+          }`
+        );
+
+        if (!githubMessage) {
+          if (id) {
+            console.log(
+              `${logSymbols[archived ? 'error' : 'success']} GitHub${
+                link && html_url ? ` – ${html_url}` : ''
+              }`
+            );
+          }
+        } else if (githubMessage === 'Not Found') {
+          console.log(`${logSymbols.warning} GitHub – repository not found`);
+        }
+
+        if (msg && npmMessage) {
+          console.log(`${info} ${npmMessage}`);
+        }
+
+        if (index !== args.length - 1) {
+          console.log('');
+        }
+      }
+    });
   });
 
 program.on('--help', () => {
