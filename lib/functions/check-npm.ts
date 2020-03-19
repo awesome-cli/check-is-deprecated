@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { promisify } from 'bluebird';
+import { promisify } from 'util';
 
 import { spinner } from './spinner';
 
@@ -26,9 +26,11 @@ export const checkNpmRepo = async (arg: string) => {
   spinner.start();
 
   try {
-    const stdout = (await execAsync(
+    const { stderr, stdout } = await execAsync(
       `npm view ${arg} deprecated repository`
-    )) as string;
+    );
+
+    spinner.succeed();
 
     stdout.split("'").map(async (item, itemIndex) => {
       if (item.includes('deprecated')) {
@@ -49,10 +51,8 @@ export const checkNpmRepo = async (arg: string) => {
       }
     });
   } catch (err) {
-    error.message = `${arg} not found`;
+    spinner.fail(`npm - ${arg} not found`);
   }
-
-  spinner.stop();
 
   return { data, error };
 };
