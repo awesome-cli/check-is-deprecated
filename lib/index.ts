@@ -19,58 +19,68 @@ program
   .usage('<pkgs> [options]')
   .option('-m, --msg', 'output deprecation message')
   .option('-l, --link', 'output repo link')
-  .action(async ({ args, msg, link }) => {
-    if (args.length === 0) {
-      return console.log('Packages are not provided');
-    }
+  .action(
+    async ({
+      args,
+      msg,
+      link,
+    }: {
+      args: string[];
+      msg: string;
+      link: string;
+    }) => {
+      if (args.length === 0) {
+        return console.log('Packages are not provided');
+      }
 
-    const results = await Promise.all(
-      args.map(async (arg: string) => {
-        const npm = await checkNpmRepo(arg);
+      const results = await Promise.all(
+        args.map(async arg => {
+          const npm = await checkNpmRepo(arg);
 
-        const github = await checkGithubRepo(npm.user, npm.repo);
+          const github = await checkGithubRepo(npm.user, npm.repo);
 
-        return { pkg: arg, npm, github };
-      })
-    );
+          return { pkg: arg, npm, github };
+        })
+      );
 
-    results.map(({ pkg, npm, github }: any, index) => {
-      const { deprecated, message: npmMessage, error } = npm;
-      const { id, archived, html_url, message: githubMessage } = github;
+      results.map(({ pkg, npm, github }, index) => {
+        const { deprecated, error, message: npmMessage } = npm;
+        const { id, archived, html_url, message: githubMessage } = github;
 
-      if (error) {
-        console.log(chalk.yellow(`${logSymbols.warning} ${error}`));
-      } else {
         console.log(`${chalk.bold.magentaBright(pkg)}:`);
 
-        console.log(
-          `${logSymbols[deprecated ? 'error' : 'success']} npm${
-            link ? ` – https://www.npmjs.com/package/${pkg}` : ''
-          }`
-        );
+        if (error) {
+          console.log(`${logSymbols.warning} npm – repository not found`);
+        } else {
+          console.log(
+            `${logSymbols[deprecated ? 'error' : 'success']} npm${
+              link ? ` – https://www.npmjs.com/package/${pkg}` : ''
+            }`
+          );
 
-        if (!githubMessage) {
-          if (id) {
-            console.log(
-              `${logSymbols[archived ? 'error' : 'success']} GitHub${
-                link && html_url ? ` – ${html_url}` : ''
-              }`
-            );
+          if (!githubMessage) {
+            if (id) {
+              console.log(
+                `${logSymbols[archived ? 'error' : 'success']} GitHub${
+                  link && html_url ? ` – ${html_url}` : ''
+                }`
+              );
+            }
+          } else if (githubMessage === 'Not Found') {
+            console.log(`${logSymbols.warning} GitHub – repository not found`);
           }
-        } else if (githubMessage === 'Not Found') {
-          console.log(`${logSymbols.warning} GitHub – repository not found`);
-        }
 
-        if (msg && npmMessage) {
-          console.log(`${info} ${npmMessage}`);
-        }
+          if (msg && npmMessage) {
+            console.log(`${info} ${npmMessage}`);
+          }
 
-        if (index !== args.length - 1) {
-          console.log('');
+          if (index !== args.length - 1) {
+            console.log('');
+          }
         }
-      }
-    });
-  });
+      });
+    }
+  );
 
 program.on('--help', () => {
   console.log(

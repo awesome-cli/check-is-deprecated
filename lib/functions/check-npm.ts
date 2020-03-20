@@ -5,11 +5,11 @@ import { spinner } from './spinner';
 
 const execAsync = promisify(exec);
 
-// type NpmData = {
-//   message: string;
-//   user: string;
-//   repo: string;
-//   deprecated: boolean;
+// type Data = {
+//   deprecated?: boolean;
+//   message?: string;
+//   user?: string;
+//   repo?: string;
 // };
 
 export const checkNpmRepo = async (arg: string) => {
@@ -21,9 +21,7 @@ export const checkNpmRepo = async (arg: string) => {
   try {
     const data = {} as any;
 
-    const { stderr, stdout } = await execAsync(
-      `npm view ${arg} deprecated repository`
-    );
+    const { stdout } = await execAsync(`npm view ${arg} deprecated repository`);
 
     spinner.stop();
 
