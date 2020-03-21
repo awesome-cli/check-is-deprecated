@@ -5,13 +5,6 @@ import { spinner } from './spinner';
 
 const execAsync = promisify(exec);
 
-// type Data = {
-//   deprecated?: boolean;
-//   message?: string;
-//   user?: string;
-//   repo?: string;
-// };
-
 export const checkNpmRepo = async (arg: string) => {
   let messageIndex: number;
 
@@ -19,7 +12,7 @@ export const checkNpmRepo = async (arg: string) => {
   spinner.start();
 
   try {
-    const data = {} as any;
+    const data: any = {};
 
     const { stdout } = await execAsync(`npm view ${arg} deprecated repository`);
 
