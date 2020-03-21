@@ -1,7 +1,7 @@
 # Check is deprecated Changelog
 
-## 1.1.0 (2020-03-21)
-## Improvement
+## 1.1.0 / 1.1.1 (2020-03-21)
+#### Improvement
 - speed improvements
 - result display improvements
 
