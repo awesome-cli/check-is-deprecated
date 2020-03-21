@@ -34,7 +34,7 @@ program
       }
 
       const results = await Promise.all(
-        args.map(async arg => {
+        args.map(async (arg) => {
           const npm = await checkNpmRepo(arg);
 
           const github = await checkGithubRepo(npm.user, npm.repo);
