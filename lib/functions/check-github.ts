@@ -15,7 +15,7 @@ export const checkGithubRepo = async (user: string, repo: string) => {
     spinner.stop();
 
     return data;
-  } catch (err) {
+  } catch {
     spinner.stop();
 
     return { error: 'Unable to check repository' };

@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import isOnline from 'is-online';
 
 import { spinner } from './spinner';
 
@@ -39,8 +40,16 @@ export const checkNpmRepo = async (arg: string) => {
 
     return data;
   } catch (err) {
+    // const online = await isOnline();
+
+    // console.log(online);
+
     spinner.stop();
 
+    // if (online === false) {
+    //   return { error: `Error with connection` };
+    // } else {
     return { error: `npm - ${arg} not found` };
+    // }
   }
 };
