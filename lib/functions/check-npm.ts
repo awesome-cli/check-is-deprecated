@@ -15,7 +15,9 @@ export const checkNpmRepo = async (arg: string) => {
   try {
     const data: any = {};
 
-    const { stdout } = await execAsync(`npm view ${arg} deprecated repository`);
+    const { stdout } = await execAsync(
+      `npm view ${arg} deprecated repository -json`
+    );
 
     spinner.stop();
 

@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JB1905/check-is-deprecated.git"
+    "url": "https://github.com/awesome-cli/check-is-deprecated.git"
   },
   "engines": {
     "node": ">=10"
@@ -27,9 +27,9 @@
     "find"
   ],
   "bugs": {
-    "url": "https://github.com/JB1905/check-is-deprecated/issues"
+    "url": "https://github.com/awesome-cli/check-is-deprecated/issues"
   },
-  "homepage": "https://github.com/JB1905/check-is-deprecated#readme",
+  "homepage": "https://github.com/awesome-cli/check-is-deprecated#readme",
   "bin": {
     "check-is-deprecated": "bin/index.js",
     "is-deprecated": "bin/index.js",
@@ -42,6 +42,7 @@
     "is-online": "^8.3.0",
     "log-symbols": "^3.0.0",
     "node-fetch": "^2.6.0",
+    "npm-get-package-info": "^1.0.0-beta.2",
     "ora": "^4.0.3"
   },
   "devDependencies": {

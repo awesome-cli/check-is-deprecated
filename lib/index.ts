@@ -5,6 +5,7 @@ import program from 'commander';
 import figlet from 'figlet';
 import chalk from 'chalk';
 import logSymbols from 'log-symbols';
+import npmGetPackageInfo from 'npm-get-package-info';
 
 import { checkNpmRepo } from './functions/check-npm';
 import { checkGithubRepo } from './functions/check-github';
@@ -28,7 +29,14 @@ program
 
     const results = await Promise.all(
       args.map(async (arg) => {
-        const npm = await checkNpmRepo(arg);
+        // const npm = await checkNpmRepo(arg);
+
+        const npm = (await npmGetPackageInfo({
+          name: arg,
+          info: ['deprecated', 'repository'],
+        })) as any;
+
+        console.log(npm);
 
         let github = {} as any;
 

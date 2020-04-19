@@ -1,4 +1,4 @@
-# [Check is deprecated](https://github.com/jb1905/check-is-deprecated)
+# [Check is deprecated](https://github.com/awesome-cli/check-is-deprecated)
 
 [![NPM version](http://img.shields.io/npm/v/check-is-deprecated.svg?style=flat-square)](https://www.npmjs.com/package/check-is-deprecated)
 [![NPM downloads](http://img.shields.io/npm/dm/check-is-deprecated.svg?style=flat-square)](https://www.npmjs.com/package/check-is-deprecated)
