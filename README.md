@@ -14,14 +14,17 @@ $ npm install -g check-is-deprecated
 
 ## How to Use
 ```bash
-$ check-is-deprecated <packages> [options]
+$ check-is-deprecated [options] [packages]
 ```
 
 **Instead of `check-is-deprecated` you can use aliases: `is-deprecated` & `cid`**
 
 ## Options
+- `-f, --file [url]` get packages from package.json
+- `-g, --github` check GitHub repository
 - `-m, --msg` output deprecation message
 - `-l, --link` output repo link
+- `-a, --all` display results for all packages
 
 ## License
 This project is licensed under the MIT License © 2020-present Jakub Biesiada
