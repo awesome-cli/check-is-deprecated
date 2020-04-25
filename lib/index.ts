@@ -26,7 +26,7 @@ program
   .action(async (params: Params) => {
     const { args, file, ...rest } = params;
 
-    if (args.length === 0) {
+    if (args.length === 0 && !file) {
       program.outputHelp();
 
       process.exit(1);
