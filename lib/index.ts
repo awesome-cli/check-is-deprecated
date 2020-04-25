@@ -26,8 +26,8 @@ program
   .action(async (params: Params) => {
     const { args, file, ...rest } = params;
 
-    if (args.length === 0 && !file) {
-      console.log('Packages are not provided');
+    if (args.length === 0) {
+      program.outputHelp();
 
       process.exit(1);
     }

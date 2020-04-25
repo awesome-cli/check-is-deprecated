@@ -7,11 +7,11 @@ export const displayPackageInfo = async ({
   results,
   msg,
   link,
-  ...rest
-}: any) => {
+}: // ...rest
+any) => {
   // console.log(rest);
 
-  results.map(({ pkg, npm, github }: any, index: any) => {
+  results.map(({ pkg, npm, github }: any, index: number) => {
     const { deprecated, error: npmError, message: npmMessage } = npm;
 
     console.log(`${chalk.bold.magentaBright(pkg)}:`);
