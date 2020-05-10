@@ -21,17 +21,17 @@ export const readPackageFile = async (path: string) => {
 
   const file = JSON.parse(await asyncReadFile(path, 'utf-8'));
 
-  let dependencies: string[] = [];
+  const repositoryDependencies: string[] = [];
 
-  const addDependencies = (deps: object) => {
-    if (deps) {
-      dependencies = [...dependencies, ...Object.keys(deps)];
-    }
+  const addDependencies = (dependencies: Record<string, any>) => {
+    if (dependencies) repositoryDependencies.push(...Object.keys(dependencies));
   };
 
-  [file.dependencies, file.devDependencies, file.peerDependencies].map((deps) =>
-    addDependencies(deps)
-  );
+  [
+    file.dependencies,
+    file.devDependencies,
+    file.peerDependencies,
+  ].map((dependencies) => addDependencies(dependencies));
 
-  return dependencies;
+  return repositoryDependencies;
 };
