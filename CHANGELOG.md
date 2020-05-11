@@ -10,7 +10,7 @@
 - added `github` option
 - added error when cannot connect to the Internet
 
-## Breaking Changes
+#### Breaking Changes
 - 
 - 
 
