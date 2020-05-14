@@ -1,15 +1,8 @@
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
+import npmGetPackageInfo from 'npm-get-package-info';
 
 export const checkNpmPackage = async (name: string) => {
   try {
-    const { stdout } = await execAsync(
-      `npm view ${name} deprecated repository --json`
-    );
-
-    return JSON.parse(stdout);
+    return await npmGetPackageInfo({ name, info: ['deprecated'] });
   } catch (err) {
     return { error: err };
   }
