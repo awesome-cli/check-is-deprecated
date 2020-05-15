@@ -1,6 +1,6 @@
 # Check is deprecated Changelog
 
-## 2.0.0 (Soon)
+## 2.0.0 (2020-05-19)
 #### New Feature
 - added option to read packages from `package.json`
 - added `all` option
