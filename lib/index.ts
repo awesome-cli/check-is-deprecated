@@ -4,15 +4,18 @@ import path from 'path';
 import program from 'commander';
 import figlet from 'figlet';
 import chalk from 'chalk';
+import logSymbols from 'log-symbols';
 
 import { spinner } from './functions/spinner';
-import { readPackageFile } from './functions/read-package-file';
-import { getResults } from './functions/get-results';
-import { displayPackageInfo } from './functions/display-package-info';
+import { collectPackages } from './functions/collectPackages';
+import { getPackageInfo } from './functions/getPackageInfo';
+import { extractDeprecated } from './functions/extractDeprecated';
 
-import { Params } from './interfaces/params';
+import Params from './interfaces/Params';
 
 const pkg = require(path.join(__dirname, '../package.json'));
+
+const info = chalk.cyan('❯');
 
 program
   .version(pkg.version)
@@ -24,33 +27,88 @@ program
   .option('-l, --link', 'output repo link')
   .option('-a, --all', 'display results for all packages')
   .action(async (params: Params) => {
-    const { args, file, ...rest } = params;
+    const {
+      file: includePackageFile,
+      github: includeGithubRepo,
+      msg: displayMessage,
+      link: displayLink,
+      all: displayAll,
+      args,
+    } = params;
 
-    if (args.length === 0 && !file) {
+    if (args.length === 0 && !includePackageFile) {
       program.outputHelp();
 
       process.exit(1);
     }
 
-    let pkgs = args;
-
-    if (file) {
-      pkgs = [
-        ...pkgs,
-        ...(await readPackageFile(
-          typeof file === 'boolean' ? 'package.json' : file
-        )),
-      ];
-    }
+    const packagesToCheck = await collectPackages(args, includePackageFile);
 
     spinner.text = 'Checking packages';
     spinner.start();
 
-    const results = await getResults(pkgs);
+    const packagesInfo = await getPackageInfo(
+      packagesToCheck,
+      includeGithubRepo
+    );
 
     spinner.stop();
 
-    displayPackageInfo({ results, ...rest });
+    const packageResults = extractDeprecated(packagesInfo, displayAll);
+
+    if (packageResults.length === 0) {
+      console.log('🎉 All is OK!');
+
+      process.exit(1);
+    }
+
+    packageResults.map(({ packageToCheck, npm, github }, index) => {
+      console.log(`${chalk.bold.magentaBright(packageToCheck)}:`);
+
+      if ('error' in npm) {
+        console.log(`${logSymbols.warning} npm – repository not found`);
+      } else {
+        console.log(
+          `${logSymbols[npm.deprecated ? 'error' : 'success']} npm${
+            displayLink
+              ? ` – https://www.npmjs.com/package/${packageToCheck}`
+              : ''
+          }`
+        );
+
+        if (github) {
+          if ('error' in github) {
+            console.log(github.error);
+          } else if ('message' in github) {
+            if (github.message === 'Not Found') {
+              console.log(
+                `${logSymbols.warning} GitHub – repository not found`
+              );
+            } else {
+              console.log(`${logSymbols.warning} GitHub – ${github.message}`);
+            }
+          } else {
+            const { id, archived, html_url } = github;
+
+            if (id) {
+              console.log(
+                `${logSymbols[archived ? 'error' : 'success']} GitHub${
+                  displayLink && html_url ? ` – ${html_url}` : ''
+                }`
+              );
+            }
+          }
+        }
+
+        if (displayMessage && npm.deprecated) {
+          console.log(`${info} ${npm.deprecated}`);
+        }
+      }
+
+      if (index !== packageResults.length - 1) {
+        console.log('');
+      }
+    });
   });
 
 program.on('--help', () => {

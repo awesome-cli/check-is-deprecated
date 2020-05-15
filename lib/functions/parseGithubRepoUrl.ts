@@ -1,6 +1,6 @@
-import { Data } from '../interfaces/data';
+import { Data } from '../interfaces/Data';
 
-export const parseUrl = (url: string) => {
+export const parseGithubRepoUrl = (url: string) => {
   const data = {} as Data;
 
   if (url.includes('://')) {
