@@ -1,7 +1,7 @@
 import { Data } from '../interfaces/Data';
 
 export const parseGithubRepoUrl = (url: string) => {
-  const data = {} as Data;
+  const data = {} as Pick<Data, 'user' | 'repo'>;
 
   if (url.includes('://')) {
     const parts = url.split('/');
