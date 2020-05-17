@@ -1,6 +1,10 @@
 import npmGetPackageInfo from 'npm-get-package-info';
 
-export const checkNpmPackage = async (name: string) => {
+import { NpmResult } from '../interfaces/NpmResult';
+
+export const checkNpmPackage = async (
+  name: string
+): Promise<NpmResult | { error: Error }> => {
   try {
     return await npmGetPackageInfo({
       name,
