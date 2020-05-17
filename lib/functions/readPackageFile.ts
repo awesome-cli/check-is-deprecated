@@ -1,13 +1,13 @@
 import { promisify } from 'util';
-import { readFile, exists } from 'fs';
+import { readFile, stat } from 'fs';
 
 const asyncReadFile = promisify(readFile);
-const asyncExists = promisify(exists);
+const asyncStat = promisify(stat);
 
 export const readPackageFile = async (path: string) => {
   const dirs = path.split('/');
 
-  if (!(await asyncExists(path))) {
+  if (!(await asyncStat(path))) {
     console.log('File not exists');
 
     process.exit(1);
