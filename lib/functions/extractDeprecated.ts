@@ -10,6 +10,8 @@ export const extractDeprecated = <T>(
     (packageInfo: any) =>
       packageInfo.npm?.error ||
       packageInfo.npm?.deprecated ||
-      packageInfo?.github?.archived
+      packageInfo?.github?.archived ||
+      packageInfo.github?.message ||
+      packageInfo.github?.error
   );
 };
