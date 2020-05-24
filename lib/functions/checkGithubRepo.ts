@@ -1,11 +1,6 @@
 import fetch from 'node-fetch';
 
-import { GithubResult } from '../interfaces/GithubResult';
-
-interface GithubNotFound {
-  message: string;
-  documentation_url: string;
-}
+import { GithubResult, GithubNotFound } from '../interfaces/GithubResult';
 
 export const checkGithubRepo = async (user: string, repo: string) => {
   try {

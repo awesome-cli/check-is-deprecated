@@ -2,6 +2,8 @@ import { checkNpmPackage } from './checkNpmPackage';
 import { parseGithubRepoUrl } from './parseGithubRepoUrl';
 import { checkGithubRepo } from './checkGithubRepo';
 
+import { NpmResult } from '../interfaces/NpmResult';
+
 export const getPackageInfo = async (
   packagesToCheck: string[],
   includeGithubRepo: boolean
@@ -11,12 +13,12 @@ export const getPackageInfo = async (
       try {
         const npmResults = await checkNpmPackage(packageToCheck);
 
-        if (!includeGithubRepo) {
+        if (!includeGithubRepo || (npmResults as { error: Error })?.error) {
           return { packageToCheck, npm: npmResults };
         }
 
         const { user, repo } = parseGithubRepoUrl(
-          npmResults?.repository?.url ?? npmResults?.url
+          (npmResults as NpmResult)?.repository?.url
         );
 
         const githubResults = await checkGithubRepo(user, repo);

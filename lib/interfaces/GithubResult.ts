@@ -78,6 +78,11 @@ export interface GithubResult {
   readonly subscribers_count: number;
 }
 
+export interface GithubNotFound {
+  readonly message: string;
+  readonly documentation_url: string;
+}
+
 interface License {
   readonly key: string;
   readonly name: string;

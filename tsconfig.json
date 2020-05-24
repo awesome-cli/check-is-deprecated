@@ -4,6 +4,7 @@
     "outDir": "bin",
     "rootDir": "lib",
     "strict": true,
+    "strictNullChecks": false,
     "esModuleInterop": true,
     "resolveJsonModule": true
   }
