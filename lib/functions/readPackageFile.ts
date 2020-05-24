@@ -23,7 +23,7 @@ export const readPackageFile = async (path: string) => {
 
   const repositoryDependencies: string[] = [];
 
-  const addDependencies = (dependencies: Record<string, any>) => {
+  const addDependencies = (dependencies: Record<string, string>) => {
     if (dependencies) repositoryDependencies.push(...Object.keys(dependencies));
   };
 
