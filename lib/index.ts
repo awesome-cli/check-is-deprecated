@@ -44,7 +44,7 @@ program
 
     const packagesToCheck = await collectPackages(args, includePackageFile);
 
-    spinner.text = 'Checking packages';
+    spinner.text = `Checking package${packagesToCheck.length > 1 ? 's' : ''}`;
     spinner.start();
 
     const packagesInfo = await getPackageInfo(
