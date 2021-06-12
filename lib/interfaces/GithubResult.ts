@@ -1,4 +1,4 @@
-export interface GithubResult {
+export interface GithubResult extends Record<string, any> {
   readonly id: number;
   readonly node_id: string;
   readonly name: string;

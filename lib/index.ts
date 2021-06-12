@@ -5,13 +5,15 @@ import program from 'commander';
 import figlet from 'figlet';
 import chalk from 'chalk';
 import logSymbols from 'log-symbols';
+import ora from 'ora';
 
-import { spinner } from './functions/spinner';
-import { collectPackages } from './functions/collectPackages';
-import { getPackageInfo } from './functions/getPackageInfo';
-import { extractDeprecated } from './functions/extractDeprecated';
+import { collectPackages } from './helpers/collectPackages';
+import { getPackageInfo } from './helpers/getPackageInfo';
+import { extractDeprecated } from './helpers/extractDeprecated';
 
 import Params from './interfaces/Params';
+
+const spinner = ora();
 
 const pkg = require(path.join(__dirname, '../package.json'));
 
@@ -22,8 +24,8 @@ program
   .description(pkg.description)
   .usage('[options]  [packages]')
   .option('-f, --file [url]', 'get packages from package.json')
-  .option('-g, --github', 'check GitHub repository')
-  .option('-m, --msg', 'output deprecation message')
+  .option('-g, --gh, --github', 'check GitHub repository')
+  .option('-m, --msg, --message', 'output deprecation message')
   .option('-l, --link', 'output repo link')
   .option('-a, --all', 'display results for all packages')
   .action(async (params: Params) => {

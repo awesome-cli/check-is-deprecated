@@ -7,7 +7,7 @@ export const extractDeprecated = <T>(
   }
 
   return packagesInfo.filter(
-    (packageInfo: any) =>
+    (packageInfo) =>
       packageInfo.npm?.error ||
       packageInfo.npm?.deprecated ||
       packageInfo?.github?.archived ||
