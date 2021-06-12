@@ -27,11 +27,9 @@ export const readPackageFile = async (path: string) => {
     if (dependencies) repositoryDependencies.push(...Object.keys(dependencies));
   };
 
-  [
-    file.dependencies,
-    file.devDependencies,
-    file.peerDependencies,
-  ].map((dependencies) => addDependencies(dependencies));
+  [file.dependencies, file.devDependencies, file.peerDependencies].map(
+    (dependencies) => addDependencies(dependencies)
+  );
 
   return repositoryDependencies;
 };
